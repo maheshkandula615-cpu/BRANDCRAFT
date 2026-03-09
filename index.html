@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>BrandCraft AI</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+<h2>BrandCraft AI</h2>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#generator">Generator</a>
+<a href="#services">Services</a>
+<a href="#contact">Contact</a>
+</nav>
+
+</header>
+
+
+<section id="home" class="hero">
+
+<h1>Build Your Brand with AI</h1>
+
+<p>Generate startup names and branding ideas instantly.</p>
+
+<a href="#generator" class="btn">Try Generator</a>
+
+</section>
+
+
+<section id="generator" class="generator">
+
+<h2>AI Brand Name Generator</h2>
+
+<input type="text" id="keyword" placeholder="Enter your business idea">
+
+<button onclick="generateBrand()">Generate</button>
+
+<div id="results"></div>
+
+</section>
+
+
+<section id="services" class="services">
+
+<h2>Our AI Tools</h2>
+
+<div class="card-container">
+
+<div class="card">
+<h3>Logo Generator</h3>
+<p>Create beautiful logos instantly.</p>
+<input type="text" id="logo-keyword" placeholder="Enter brand name">
+<button onclick="generateLogo()">Generate Logo</button>
+<div id="logo-result"></div>
+</div>
+
+<div class="card">
+<h3>Brand Names</h3>
+<p>Generate unique startup brand names.</p>
+<input type="text" id="brand-keyword" placeholder="Enter business idea">
+<button onclick="generateBrandNames()">Generate Names</button>
+<div id="brand-results"></div>
+</div>
+
+<div class="card">
+<h3>Marketing Ideas</h3>
+<p>AI generated marketing strategies.</p>
+<input type="text" id="marketing-keyword" placeholder="Enter product/service">
+<button onclick="generateMarketing()">Generate Ideas</button>
+<div id="marketing-results"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<section id="contact" class="contact">
+
+<h2>Contact Us</h2>
+
+<form>
+
+<input type="text" placeholder="Name">
+
+<input type="email" placeholder="Email">
+
+<textarea placeholder="Message"></textarea>
+
+<button type="submit">Send</button>
+
+</form>
+
+</section>
+
+
+<footer>
+
+<p>© 2026 BrandCraft AI</p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
