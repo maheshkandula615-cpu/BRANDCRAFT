@@ -31,98 +31,89 @@ def static_files(path):
 @app.route('/generate-logo')
 @require_api_key
 def generate_logo():
-    keyword = request.args.get('keyword', 'Brand')
-    if not keyword:
-        keyword = 'Brand'
-    
-    # AI-powered color generation based on keyword hash
+    keyword = request.args.get('keyword', 'Brand').strip() or 'Brand'
+
+    style_variants = [
+        {'name': 'Minimalist Tech', 'id': 'minimal'},
+        {'name': 'Geometric Blue', 'id': 'geometric'},
+        {'name': 'Futuristic Glow', 'id': 'futuristic'}
+    ]
+
+    logos = []
+    for variant in style_variants:
+        svg = build_logo_svg(keyword, variant['id'])
+        logos.append({
+            'style': variant['name'],
+            'svg': svg
+        })
+
+    return jsonify({'logos': logos})
+
+
+def build_logo_svg(keyword, style):
+    # deterministic color palette based on keyword + style
     import hashlib
-    hash_obj = hashlib.md5(keyword.encode())
+    hash_obj = hashlib.md5((keyword + style).encode())
     hash_int = int(hash_obj.hexdigest(), 16)
-    color1 = f"#{hash_int % 0xFFFFFF:06X}"
-    color2 = f"#{(hash_int // 256) % 0xFFFFFF:06X}"
-    color3 = f"#{(hash_int // 65536) % 0xFFFFFF:06X}"
-    
-    # Get complementary colors for depth
-    accent_color = f"#{(hash_int * 1103515245 + 12345) % 0xFFFFFF:06X}"
-    
-    # Choose icon, font style, and background shape based on keyword
-    keyword_lower = keyword.lower()
-    icon = get_icon_for_keyword(keyword_lower)
-    font_style = get_font_style_for_keyword(keyword_lower, color1, color2)
-    pattern = get_pattern_for_keyword(keyword_lower)
-    background_shapes = get_background_shapes(keyword_lower, color1, color2, color3, accent_color)
-    decorative_elements = get_decorative_elements(keyword_lower, accent_color)
-    
-    # AI-enhanced SVG logo with multiple shapes and visual depth
+
+    if style == 'minimal':
+        color1 = '#0D47A1'
+        color2 = '#1976D2'
+        color3 = '#64B5F6'
+        accent_color = '#42A5F5'
+        background_shapes = f'<rect width="300" height="150" fill="{color1}" rx="20" opacity="0.15"/>'
+        decorative_elements = ''
+        icon = '<g><rect x="90" y="45" width="30" height="60" fill="white" opacity="0.9" rx="4"/><rect x="150" y="45" width="30" height="60" fill="white" opacity="0.9" rx="4"/><rect x="210" y="45" width="30" height="60" fill="white" opacity="0.9" rx="4"/></g>'
+        font_style = f'<text x="150" y="120" font-family="Segoe UI, sans-serif" font-size="26" font-weight="700" fill="white" text-anchor="middle">{keyword}</text>'
+
+    elif style == 'geometric':
+        color1 = '#1E3A8A'
+        color2 = '#2563EB'
+        color3 = '#93C5FD'
+        accent_color = '#60A5FA'
+        background_shapes = get_background_shapes(keyword.lower(), color1, color2, color3, accent_color)
+        decorative_elements = get_decorative_elements(keyword.lower(), accent_color)
+        icon = get_icon_for_keyword(keyword.lower())
+        font_style = f'<text x="150" y="120" font-family="Poppins, sans-serif" font-size="28" font-weight="800" fill="url(#textGrad)" text-anchor="middle">{keyword}</text>'
+
+    else:  # futuristic
+        color1 = '#0B69A3'
+        color2 = '#1973D8'
+        color3 = '#1FB5FF'
+        accent_color = '#7BB7FF'
+        background_shapes = f'<polygon points="20,130 70,20 160,40 260,20 280,125" fill="{color2}" opacity="0.25"/><line x1="30" y1="110" x2="270" y2="40" stroke="{accent_color}" stroke-width="2" opacity="0.5"/>'
+        decorative_elements = '<circle cx="45" cy="45" r="8" fill="white" opacity="0.4"/><circle cx="250" cy="110" r="6" fill="white" opacity="0.35"/>'
+        icon = '<g><path d="M75 55 L115 55 L120 85 L80 85 Z" fill="white" opacity="0.9"/><path d="M90 40 L90 100" stroke="white" stroke-width="3" opacity="0.8"/></g>'
+        font_style = f'<text x="150" y="120" font-family="Orbitron, sans-serif" font-size="26" font-weight="700" fill="url(#textGrad)" text-anchor="middle">{keyword}</text>'
+
+    pattern = get_pattern_for_keyword(keyword.lower())
+
     svg = f'''<svg width="300" height="150" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
   <defs>
-    <!-- Multi-stop gradient for depth -->
     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:{color1};stop-opacity:1" />
-      <stop offset="50%" style="stop-color:{color2};stop-opacity:0.95" />
-      <stop offset="100%" style="stop-color:{color3};stop-opacity:1" />
+      <stop offset="0%" style="stop-color:{color1};stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:{color2};stop-opacity:0.85" />
+      <stop offset="100%" style="stop-color:{color3};stop-opacity:0.9" />
     </linearGradient>
-    
-    <!-- Radial gradient for overlay glow -->
     <radialGradient id="radialGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:white;stop-opacity:0.15" />
+      <stop offset="0%" style="stop-color:white;stop-opacity:0.2" />
       <stop offset="100%" style="stop-color:{color1};stop-opacity:0" />
     </radialGradient>
-    
-    <!-- Accent gradient -->
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:{accent_color};stop-opacity:0.8" />
-      <stop offset="100%" style="stop-color:{color1};stop-opacity:0.3" />
-    </linearGradient>
-    
-    <!-- Text gradient -->
     <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#f5f5f5;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#dbeafe;stop-opacity:0.95" />
     </linearGradient>
-    
-    <!-- Advanced shadow filters -->
-    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-      <feOffset dx="3" dy="3" result="offsetblur"/>
-      <feComponentTransfer>
-        <feFuncA type="linear" slope="0.35"/>
-      </feComponentTransfer>
-      <feMerge>
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    
-    <!-- Glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2"/>
-      <feColorMatrix type="saturate" values="1.2"/>
-    </filter>
-    
-    <!-- Pattern for background depth -->
     {pattern}
   </defs>
-  
-  <!-- Background shapes -->
+  <rect width="300" height="150" fill="url(#grad1)" rx="20"/>
   {background_shapes}
-  
-  <!-- Decorative elements -->
   {decorative_elements}
-  
-  <!-- Glow overlay -->
-  <rect width="300" height="150" fill="url(#radialGlow)" rx="20" opacity="0.6"/>
-  
-  <!-- Icon with glow -->
-  <g filter="url(#glow)">
-    {icon}
-  </g>
-  
-  <!-- Brand name -->
+  <rect width="300" height="150" fill="url(#radialGlow)" rx="20" opacity="0.5"/>
+  <g>{icon}</g>
   {font_style}
 </svg>'''
-    return svg, 200, {'Content-Type': 'image/svg+xml'}
+
+    return svg
 
 def get_background_shapes(keyword, color1, color2, color3, accent_color):
     """Return dynamic background shapes based on industry"""

@@ -80,10 +80,25 @@ async function generateLogo() {
       'X-API-Key': API_KEY
     }
   });
-  const svg = await response.text();
+
+  if (!response.ok) {
+    const errorMsg = await response.text();
+    alert('Logo API error: ' + errorMsg);
+    return;
+  }
+
+  const data = await response.json();
 
   const resultsDiv = document.getElementById('logo-result');
-  resultsDiv.innerHTML = `<h3>Generated Logo:</h3>${svg}`;
+  resultsDiv.innerHTML = '<h3>Generated Logo Variants:</h3>' +
+    '<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">' +
+    data.logos.map(logo => `
+      <div style="padding: 10px; background: rgba(255,255,255,0.85); border-radius: 12px; width: 320px; box-shadow: 0 6px 20px rgba(0,0,0,0.12);">
+        <h4 style="font-family: 'Segoe UI', sans-serif; font-size: 16px; color: #1D4ED8; text-align:center; margin: 8px 0;">${logo.style}</h4>
+        ${logo.svg}
+      </div>
+    `).join('') +
+    '</div>';
 }
 
 async function generateMarketing() {

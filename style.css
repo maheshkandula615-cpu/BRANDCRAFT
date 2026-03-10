@@ -1,7 +1,7 @@
 body{
 font-family:Arial;
 margin:0;
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: linear-gradient(135deg, #5c6dc3 0%, #9030e9 100%);
 min-height: 100vh;
 position: relative;
 }
@@ -14,9 +14,9 @@ left: 0;
 width: 100%;
 height: 100%;
 background: 
-  radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-  radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+  radial-gradient(circle at 20% 80%, rgba(69, 69, 180, 0.3) 0%, transparent 50%),
+  radial-gradient(circle at 80% 20%, rgba(148, 119, 223, 0.3) 0%, transparent 50%),
+  radial-gradient(circle at 40% 40%, rgba(147, 204, 224, 0.3) 0%, transparent 50%);
 pointer-events: none;
 z-index: -1;
 }
@@ -30,7 +30,7 @@ color:rgb(255, 255, 255);
 }
 
 nav a{
-color:magenta;
+color:rgb(36, 22, 36);
 margin:10px;
 text-decoration:none;
 }
@@ -38,15 +38,15 @@ text-decoration:none;
 .hero{
 text-align:center;
 padding:120px;
-background:linear-gradient(to right,#6a11cb,#2575fc);
-color:#ffffff;
+background:linear-gradient(to right,#7e4ea3,#474ace);
+color:#f9f9fc;
 }
 
 .hero h1 {
 font-family: 'Arial Black', 'Impact', sans-serif;
 font-size: 48px;
 font-weight: bold;
-color: #ffffff;
+color: #f4ecec;
 text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 letter-spacing: 2px;
 margin-bottom: 20px;
@@ -92,7 +92,7 @@ transition: all 0.3s ease;
 .generator input:focus {
 outline: none;
 transform: scale(1.05);
-box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+box-shadow: 0 6px 20px rgba(58, 48, 177, 0.2);
 }
 
 .generator button{
